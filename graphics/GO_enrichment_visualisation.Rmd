@@ -1,0 +1,195 @@
+---
+title: "Sphaerularia-Bombus infection RNA-Seq study"
+output: GO_enrichment_visualisation.html
+---
+
+## Introduction 
+The purpose of this script is to read in a list of significant gene ontology terms enriched with genes differentially
+expressed within bumblebee (Bombus terrestris) queens in response to infection by the nematode, Sphaerularia bombi. 
+
+The first step involves loading (and installing if required) R packages:
+```{r, message = FALSE}
+# Load libraries; install from scratch if needed
+libraries <- c("ggplot2", "lattice", "ggpubr")
+for (lib in libraries) {
+    if (require(package = lib, character.only = TRUE)) {
+        print("Successful")
+    } else {
+        print("Installing")
+        source("https://bioconductor.org/biocLite.R")
+        biocLite(pkgs = lib)
+        library(lib, character.only = TRUE )
+    }
+}
+```
+
+The study consists of two independent datasets:
+- Dataset 1: Bumblebee queens collected during diapause (infected (n=3) vs. control (n=3))
+- Dataset 2: Bumblebee queens collected post-diapause (infected (n=7) vs. control (n=7))
+
+```{r}
+### Plotting of enriched gene ontology terms during diapause:
+## Load in the data:
+diapause_deseq_BP <- read.table(file="results/output_node_20_diapause/BP_sig.txt", 
+                                           header = TRUE)
+
+diapause_deseq_MF <- read.table(file="results/output_node_20_diapause/MF_sig.txt", 
+                                           header = TRUE)
+
+diapause_deseq_CC <- read.table(file="results/output_node_20_diapause/CC_sig.txt", 
+                                           header = TRUE)
+
+## Combine the individual list of terms:
+diapause_deseq_combined <- rbind(diapause_deseq_BP, 
+                                 diapause_deseq_MF,
+                                 diapause_deseq_CC)
+
+## Filter out terms with BH adjusted p values:
+diapause_deseq_combined_sig <- subset(diapause_deseq_combined, weight_ks_adjusted < 0.05)
+
+
+diapause_deseq_combined_sig$category <- factor(diapause_deseq_combined_sig$category)
+
+# Set order of GO categories to plot
+levels(diapause_deseq_combined_sig$category) <- c("BP", "MF", "CC")
+
+# Round p values to plot
+diapause_deseq_combined_sig$weight_ks_adjusted <- round(diapause_deseq_combined_sig$weight_ks_adjusted, digits = 3)
+
+# Log p values for plotting 
+diapause_deseq_combined_sig$weight_ks_adjusted <- -log(diapause_deseq_combined_sig$weight_ks_adjusted)
+
+# Reorder terms for plotting 
+diapause_deseq_combined_sig$Term <- factor(diapause_deseq_combined_sig$Term, levels = diapause_deseq_combined_sig$Term[order(diapause_deseq_combined_sig$category, diapause_deseq_combined_sig$weight_ks_adjusted)])
+
+## For plotting queen, update GO term names to include total number of annotated terms:
+diapause_deseq_combined_sig$updated_terms <- paste(diapause_deseq_combined_sig$Term, " ", "(", diapause_deseq_combined_sig$Annotated, ")", sep="")
+
+## Remove underscores:
+diapause_deseq_combined_sig$updated_terms <- gsub("_", " ", diapause_deseq_combined_sig$updated_terms)
+
+## Generate a dot plot for all enriched terms within infected diapause queens:
+diapause_deseq_combined_plot <- ggdotchart(data = diapause_deseq_combined_sig, 
+                                           x = "updated_terms", y = "weight_ks_adjusted",
+                                           color = "category",
+                                           palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+                                           sorting = "descending",
+                                           ylab = "-log10(p)",
+                                           xlab = "Gene ontology term",
+                                           legend.title = "Gene ontology",
+                                           add = "segments",
+                                           rotate = TRUE,
+                                           group = "category",
+                                           dot.size = 6,
+                                           ggtheme = theme_pubr()
+                                           )
+                                               
+## Update the size of labels:
+diapause_deseq_combined_plot <- diapause_deseq_combined_plot +
+                                scale_y_continuous(expand = c(0, 0)) +
+                                theme(axis.text=element_text(size=10),
+                                      axis.title.x = element_text(size=15,face="bold"),
+                                      axis.title.y = element_text(size=15,face="bold"),
+                                      axis.text.y = element_text(size=15, face="bold"),
+                                      axis.text.x = element_text(size=15),
+                                      legend.position="none") +
+                                expand_limits(y = 10) +
+                                geom_hline(yintercept = 1.301, linetype="dashed", colour="black")
+
+##
+ggsave("diapause_deseq_combined_go_term_plot.png", 
+       height = 7.5,
+       width = 12.5)
+```
+
+For the second dataset:
+
+```{r}
+### Plotting of enriched gene ontology terms post-diapause:
+## Load in the data:
+postdiapause_deseq_BP <- read.table(file="results/output_node_20_postdiapause/BP_sig.txt", 
+                                           header = TRUE)
+
+postdiapause_deseq_MF <- read.table(file="results/output_node_20_postdiapause/MF_sig.txt", 
+                                           header = TRUE)
+
+postdiapause_deseq_CC <- read.table(file="results/output_node_20_postdiapause/CC_sig.txt", 
+                                           header = TRUE)
+
+## Combine the individual list of terms:
+postdiapause_deseq_combined <- rbind(postdiapause_deseq_BP, 
+                                     postdiapause_deseq_MF,
+                                     postdiapause_deseq_CC)
+
+## Filter out terms with BH adjusted p values:
+postdiapause_deseq_combined_sig <- subset(postdiapause_deseq_combined, weight_ks_adjusted < 0.05)
+
+
+postdiapause_deseq_combined_sig$category <- factor(postdiapause_deseq_combined_sig$category)
+
+# Set order of GO categories to plot
+levels(postdiapause_deseq_combined_sig$category) <- c("BP", "MF", "CC")
+
+# Round p values to plot
+postdiapause_deseq_combined_sig$weight_ks_adjusted <- round(postdiapause_deseq_combined_sig$weight_ks_adjusted, digits = 3)
+
+# Log p values for plotting 
+postdiapause_deseq_combined_sig$weight_ks_adjusted <- -log(postdiapause_deseq_combined_sig$weight_ks_adjusted)
+
+# Reorder terms for plotting 
+postdiapause_deseq_combined_sig$Term <- factor(postdiapause_deseq_combined_sig$Term, levels = postdiapause_deseq_combined_sig$Term[order(postdiapause_deseq_combined_sig$category, postdiapause_deseq_combined_sig$weight_ks_adjusted)])
+
+## For plotting queen, update GO term names to include total number of annotated terms:
+postdiapause_deseq_combined_sig$updated_terms <- paste(postdiapause_deseq_combined_sig$Term, " ", "(", postdiapause_deseq_combined_sig$Annotated, ")", sep="")
+
+## Remove underscores:
+postdiapause_deseq_combined_sig$updated_terms <- gsub("_", " ", postdiapause_deseq_combined_sig$updated_terms)
+
+## Generate a dot plot for all enriched terms within infected diapause queens:
+postdiapause_deseq_combined_plot <- ggdotchart(data = postdiapause_deseq_combined_sig, 
+                                           x = "updated_terms", y = "weight_ks_adjusted",
+                                           color = "category",
+                                           palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+                                           sorting = "descending",
+                                           ylab = "-log10(p)",
+                                           xlab = "Gene ontology term",
+                                           legend.title = "Gene ontology",
+                                           add = "segments",
+                                           rotate = TRUE,
+                                           group = "category",
+                                           dot.size = 6,
+                                           ggtheme = theme_pubr()
+                                           )
+                                               
+## Update the size of labels:
+postdiapause_deseq_combined_plot <- postdiapause_deseq_combined_plot +
+                                scale_y_continuous(expand = c(0, 0)) +
+                                theme(axis.text=element_text(size=10),
+                                      axis.title.x = element_text(size=15,face="bold"),
+                                      axis.title.y = element_text(size=15,face="bold"),
+                                      axis.text.y = element_text(size=15, face="bold"),
+                                      axis.text.x = element_text(size=15),
+                                      legend.position="none") +
+                                expand_limits(y = 10) +
+                                geom_hline(yintercept = 1.301, linetype="dashed", colour="black")
+```
+
+Combine plots:
+
+```{r}
+## Combine plot:
+ggarrange(diapause_deseq_combined_plot, postdiapause_deseq_combined_plot,
+                           align = "hv",
+                           nrow = 2, ncol = 1,
+                           heights = c(0.5,1.2),
+                           common.legend = TRUE,
+                           #labels = c("A) Diapause", "B) Postdiapause"),
+                           vjust = c(1.4,1.4))
+
+
+ggsave("diapause_deseq_combined_go_term_plot.png", 
+       height = 7.5,
+       width = 12.5)
+```
+
+
