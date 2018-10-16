@@ -1,6 +1,6 @@
 --- 
 title: "Sphaerularia-Bombus infection RNA-Seq study"
-output: differential_expression_analysis.html
+output: differential_expression_analysis_diapause.html
 --- 
 
 # Introduction
