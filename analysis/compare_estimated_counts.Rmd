@@ -32,22 +32,23 @@ Read in counts for diapause samples:
 
 ```{r, message=FALSE} 
 ## Set paths to folders containing output files from kallisto
-path_diapause <- list()
-path_diapause$sample_batch_info <- "./input/diapause/sample_list.txt"
-path_diapause$kallisto_output <- "./input/diapause"
+path <- list()
+path$sample_batch_info <- "./input/combined/sample_list.txt"
+path$kallisto_output <- "./input/combined"
 # Set relative paths:
-path_diapause$kallisto_files_relative <- grep(x = list.files(path_diapause$kallisto_output,
+path$kallisto_files_relative <- grep(x = list.files(path$kallisto_output,
                                                 recursive = TRUE),
                                       pattern = "h5",
                                       value   = TRUE)
-path_diapause$kallisto_files <- file.path(path_diapause$kallisto_output,
-                                  path_diapause$kallisto_files_relative)
+path$kallisto_files <- file.path(path$kallisto_output,
+                                  path$kallisto_files_relative)
 # Automatically extract file names from kallisto output for colnames
-names(path_diapause$kallisto_files) <- gsub(path_diapause$kallisto_files_relative,
-                                    pattern = "/.*", replacement = "")
-for (filenumber in 1:length(path_diapause$kallisto_files)) {
-  current_name <- names(path_diapause$kallisto_files)[filenumber]
-  current_file <- path_diapause$kallisto_files[filenumber]
+names(path$kallisto_files) <- gsub(path$kallisto_files_relative,
+                                    pattern = "s
+                                   /.*", replacement = "")
+for (filenumber in 1:length(path$kallisto_files)) {
+  current_name <- names(path$kallisto_files)[filenumber]
+  current_file <- path$kallisto_files[filenumber]
   if (FALSE == grepl(pattern = current_name, x = current_file)) {
     kill("we have a problem - names and filenames dont match up")
   }
@@ -58,9 +59,9 @@ for (filenumber in 1:length(path_diapause$kallisto_files)) {
 
 ```{r}
 ## Extract sample names and put into df for tximport
-samples_diapause     <- data.frame(sample_name = names(path_diapause$kallisto_files))
+samples     <- data.frame(sample_name = names(path$kallisto_files))
 ## Read in sample information for room and batch:
-samples_diapause_information <- read.table(file = path_diapause$sample_batch_info,
+samples_information <- read.table(file = path$sample_batch_info,
                                   header = FALSE,
                                   col.names = c("sample_name",
                                                 "timepoint",
@@ -68,7 +69,7 @@ samples_diapause_information <- read.table(file = path_diapause$sample_batch_inf
                                   row.names = 1)
 
 ## Make sure uninfected ('control') is the reference:
-samples_diapause_information$status <- relevel(x = samples_diapause_information$status,
+samples_information$status <- relevel(x = samples_information$status,
                                          ref = "control")
 ```
 
@@ -80,17 +81,65 @@ Because we do a gene-level analysis first, transcript abundances are summarised 
 
 ```{r}
 # Read in file corresponding to transcripts to gene ids
-tx2gene <- read.table(file      = "input/diapause/rna_and_corresponding_gene_ids.txt", 
-                      header    = FALSE, 
-                      col.names = c("TXNAME","GENEID")) # i.e., transcript name, gene name
+tx2gene <- read.table(file      = "input/combined/rna_and_corresponding_gene_ids.txt",
+                      header    = FALSE,
+                      col.names = c("TXNAME", "GENEID")) # i.e., transcript name, gene name
 
 # Use tximport on kallisto files
 ## Counts are estimated counts from kallisto:
-txi_counts <- tximport(path_diapause$kallisto_files,
+txi_counts <- tximport(path$kallisto_files,
                        type    = "kallisto",
                        tx2gene = tx2gene,
                        countsFromAbundance = "no")
 
 ## Count the number of genes per input data.frame:
 nrow(txi_counts$counts)
+```
+## Step Four: Check the mean counts per timepoint:
+
+```{r, message = FALSE}
+## Subset the diapause samples:
+txi_counts_diapause <- txi_counts$counts[, 15:20]
+txi_counts_postdiapause <- txi_counts$counts[, 1:14]
+
+## Calculate means for each time point:
+means_df <- as.data.frame(cbind(rowMeans(txi_counts_diapause),
+                                rowMeans(txi_counts_postdiapause)))
+## Update column names:
+colnames(means_df) <- c("Diapause", "Postdiapause")
+
+## Check correlation between diapause and postdiapause counts:
+cor.test(means_df$Diapause,
+         means_df$Postdiapause)
+
+## Remove low counts:
+means_df_filtered <- subset(means_df,
+                           Diapause > 10 &
+                           Postdiapause > 10)
+
+## Generate a plot using raw estmated counts for a random sample:
+means_df_filtered_plot <- ggplot(data = means_df_filtered,
+                             aes(x = Diapause,
+                                 y = Postdiapause)) +
+                        geom_point(alpha = 0.3, size = 4) +
+                        xlab("Diapause mean raw gene-level counts") +
+                        ylab("Postdiapause mean raw gene-level counts") +
+                        geom_smooth(method = "lm", formula = y~x) +
+                        theme_bw()
+
+## Increase font size for text labels:
+means_df_filtered_plot <- means_df_filtered_plot +
+        theme(axis.title = element_text(face = "bold",
+                                        size = "25"),
+              axis.text.x = element_text(size = "17",
+                                         angle = 45,
+                                         hjust = 1),
+              axis.text.y = element_text(size = "17"))
+
+## Print to console:
+means_df_filtered_plot
+
+## Save to file:
+ggsave(file = "correlation_plots_raw_estimated_counts.png",
+       height = 10, width = 20)
 ```
