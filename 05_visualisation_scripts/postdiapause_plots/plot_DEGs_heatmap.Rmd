@@ -4,7 +4,12 @@ output: plot_go_barchart.html
 author: Joe Colgan (joscolgan)
 ---
 
-## Introduction:
+## Introduction:  
+This script is a modification of scripts created by and freely available for reuse at:
+https://github.com/wurmlab/Bter_neonicotinoid_exposure_experiment
+The paper detailing the findings should be cited when scripts are reused:
+Colgan, T.J., Fletcher, I.K., Arce, A.N., Gill, R.J., Ramos Rodrigues, A., Stolle, E., Chittka, L. and Wurm, Y.
+Caste- and pesticide-specific effects of neonicotinoid pesticide exposure on gene expression in bumblebees. Molecular Ecology.
 
 This script is for exploratory analysis of transcript quantification data and results of differential gene expression analysis.
 Input files should be R objects saved and generated from previous scripts of DE analysis, including the object resulting from using tximport() on kallisto files, the significant transcript abundances selected from this object and a results table of significant genes, generated using DESeq2. 
