@@ -1,11 +1,10 @@
----
-title: "Bombus haemolymph diapause study"
+--- 
+title: "Sphaerularia-Bombus infection RNA-Seq study"
 output: plot_go_barchart.html
-authors: Joe Colgan (joscolgan)
+author: Joe Colgan (joscolgan)
 ---
 
 ## Introduction: 
-
 This script is a modification of scripts created by and freely available for reuse at:
 https://github.com/wurmlab/Bter_neonicotinoid_exposure_experiment
 The paper detailing the findings should be cited when scripts are reused:
