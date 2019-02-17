@@ -1,15 +1,10 @@
 --- 
-title: "Sphaerularia-Bombus infection RNA-Seq study"
-output: plot_go_barchart.html
-author: Joe Colgan (joscolgan)
----
+title: "Bombus pesticide exposure: gene expression in head"
+output: plot_DEGs_heatmap.html
+author: Isabel Fletcher, Joe Colgan, Yannick Wurm http://wurmlab.com
+--- 
 
-## Introduction:  
-This script is a modification of scripts created by and freely available for reuse at:
-https://github.com/wurmlab/Bter_neonicotinoid_exposure_experiment
-The paper detailing the findings should be cited when scripts are reused:
-Colgan, T.J., Fletcher, I.K., Arce, A.N., Gill, R.J., Ramos Rodrigues, A., Stolle, E., Chittka, L. and Wurm, Y.
-Caste- and pesticide-specific effects of neonicotinoid pesticide exposure on gene expression in bumblebees. Molecular Ecology.
+## Introduction:
 
 This script is for exploratory analysis of transcript quantification data and results of differential gene expression analysis.
 Input files should be R objects saved and generated from previous scripts of DE analysis, including the object resulting from using tximport() on kallisto files, the significant transcript abundances selected from this object and a results table of significant genes, generated using DESeq2. 
@@ -30,10 +25,6 @@ for (lib in libraries) {
         library(lib, character.only = TRUE )
     }
 }
-
-## Load custom function:
-source("description_from_LOCid.R")
-source("helper_functions_for_heatmaps.R")
 
 ## Assign path for output:
 output <- "results/heatmap_figure"
@@ -129,12 +120,12 @@ normalised_counts_ordered_melt$treatment <- rep(c("infected",
                                                 each = (nrow(normalised_counts_ordered_melt) / 2))
 
 ## Step Six: Generate a barplot:
-ggplot(normalised_counts_ordered_melt, aes(sample, gene_name)) +
+diapause_plot <- ggplot(normalised_counts_ordered_melt, aes(sample, gene_name)) +
         geom_tile(aes(fill = normalised_counts)) +
-        geom_vline(xintercept = c(0.5, 3.5, 7.5)) +
-        scale_fill_gradient2(low = "blue",
-                             mid = "white",
-                             high = "orange") +
+        geom_vline(xintercept = c(0.5, 3.5, 6.5)) +
+        scale_fill_gradient2(low = "green",
+                             mid = "black",
+                             high = "red") +
         ylab("") +
                                 xlab("") +
                                 theme(legend.title = element_text(size = 12,
@@ -156,7 +147,12 @@ ggplot(normalised_counts_ordered_melt, aes(sample, gene_name)) +
                                 legend.position = "top") +
                                 scale_y_discrete(position = "right") +
                                 labs(fill = "Log fold change") +
-                                theme(axis.text.y = element_text(face = c(rep("plain", 10))))
+                                theme(axis.text.y = element_text(face = c(rep("bold", 10))))
+
+## Save object:
+## Save object for use in generating heatmap:
+save(diapause_plot,
+     file = "./diapause_plot.Rdata")
 
 ## Save output:
 ggsave("diapause_heatmap.png",
