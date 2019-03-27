@@ -1,0 +1,84 @@
+
+
+## Introduction:
+This script takes in input in the form of tab-delimited text files and generates a box-plot displaying the number of differentially expressed genes when using different subsets of samples. The output of this script is a summary plot.  
+
+Load required libraries:
+
+```{r, messages = FALSE}
+require(ggplot2)
+require(hash)
+require(ggpubr)
+```
+
+Read in data:
+
+```{r, message = FALSE}
+## Read in data - 3 vs 3 comparison:
+input_3_vs_3 <- read.table(file = "./input/3_v_3/combined_counts_per_row.txt",
+                           col.names = c("test_name",
+                                         "de_gene_counts"))
+
+input_3_vs_3$status <- "3_vs_3"
+summary(input_3_vs_3$de_gene_counts)
+
+## Read in data - 4 vs 4 comparison:
+input_4_vs_4 <- read.table(file = "./input/4_vs_4/combined_counts_per_row.txt",
+                           col.names = c("test_name",
+                                         "de_gene_counts"))
+input_4_vs_4$status <- "4_vs_4"
+summary(input_4_vs_4$de_gene_counts)
+
+## Read in data - 5 vs 5 comparison:
+input_5_vs_5 <- read.table(file = "./input/5_vs_5/combined_counts_per_row.txt",
+                           col.names = c("test_name",
+                                         "de_gene_counts"))
+input_5_vs_5$status <- "5_vs_5"
+summary(input_5_vs_5$de_gene_counts)
+
+## Read in data - 6 vs 6 comparison:
+input_6_vs_6 <- read.table(file = "./input/6_vs_6/combined_counts_per_row.txt",
+                           col.names = c("test_name",
+                                         "de_gene_counts"))
+input_6_vs_6$status <- "6_vs_6"
+summary(input_6_vs_6$de_gene_counts)
+```
+
+For plotting, combine input files:
+
+```{r, message = FALSE}
+## Combine:
+combined_df <- rbind(input_3_vs_3,
+                     input_4_vs_4,
+                     input_5_vs_5,
+                     input_6_vs_6)
+
+hist_plot <- ggplot(data = combined_df,
+                    aes(x = de_gene_counts)) +
+        xlab("Number of DEGs") +
+        geom_histogram(binwidth = 10) +
+        theme_bw()
+
+combined_hist <- hist_plot + facet_wrap(~status)
+
+## Plot
+combined_boxplot <- ggplot(combined_df, aes(x = status,
+                                            y = de_gene_counts)) +
+        xlab("Comparative tests") +
+        ylab("Number of DEGs") +
+        geom_boxplot() +
+        theme_bw()
+
+## Generate a combined plot:
+ggarrange(combined_boxplot,
+          combined_hist,
+          labels = c("A", "B"),
+          ncol = 1,
+          nrow = 2,
+          align = "hv")
+
+## Save to output:
+ggsave(file = "combined_comparative_plot.png",
+       height = 10,
+       width = 10)
+```
