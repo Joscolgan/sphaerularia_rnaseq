@@ -1,16 +1,28 @@
 #!/bin/env bash
+########################################################################
+##
+## Author: Joe Colgan                     Name: rename_file.sh
+##
+##
+## Purpose:
+## This script recreates symbolic links for compressed fastq files,
+## which allows for the renaming of the files to more human-friendly
+## names.
+##
+########################################################################
+
 ## Diapause samples:
 ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-001_1.solfastq.gz diapause_infected_1.R1.fastq.gz
 ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-001_2.solfastq.gz diapause_infected_1.R2.fastq.gz
 ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-002_1.solfastq.gz diapause_infected_2.R1.fastq.gz
-ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-002_2.solfastq.gz diapause_infected_2.R2.fastq.gz 
-ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-003_1.solfastq.gz diapause_infected_3.R1.fastq.gz 
-ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-003_2.solfastq.gz diapause_infected_3.R2.fastq.gz 
-ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-004_1.solfastq.gz diapause_control_1.R1.fastq.gz 
-ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-004_2.solfastq.gz diapause_control_1.R2.fastq.gz 
-ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-005_1.solfastq.gz diapause_control_2.R1.fastq.gz 
-ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-005_2.solfastq.gz diapause_control_2.R2.fastq.gz 
-ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-006_1.solfastq.gz diapause_control_3.R1.fastq.gz 
+ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-002_2.solfastq.gz diapause_infected_2.R2.fastq.gz
+ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-003_1.solfastq.gz diapause_infected_3.R1.fastq.gz
+ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-003_2.solfastq.gz diapause_infected_3.R2.fastq.gz
+ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-004_1.solfastq.gz diapause_control_1.R1.fastq.gz
+ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-004_2.solfastq.gz diapause_control_1.R2.fastq.gz
+ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-005_1.solfastq.gz diapause_control_2.R1.fastq.gz
+ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-005_2.solfastq.gz diapause_control_2.R2.fastq.gz
+ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-006_1.solfastq.gz diapause_control_3.R1.fastq.gz
 ln -s ../tmp_raw_sequences/110418_0015_707VLAAXX_7_SA-PE-006_2.solfastq.gz diapause_control_3.R2.fastq.gz
 
 ## Postdiapause samples:
