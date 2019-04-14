@@ -1,8 +1,8 @@
 --- 
-title: "Bombus pesticide exposure: gene expression in head"
-output: plot_DEGs_heatmap.html
-author: Isabel Fletcher, Joe Colgan, Yannick Wurm http://wurmlab.com
---- 
+title: "Sphaerularia-Bombus infection RNA-Seq study"
+output: go_enrichment_analysis.html
+author: Joe Colgan (joscolgan)
+---
 
 ## Introduction:
 
