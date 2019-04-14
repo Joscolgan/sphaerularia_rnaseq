@@ -15,10 +15,12 @@ Caste- and pesticide-specific effects of neonicotinoid pesticide exposure on gen
 
 ```{r, message=FALSE}
 # Load libraries; install from scratch if needed
-libraries <- c("tximport", "readr", "DESeq2",
-               "ggplot2", "gplots", "rhdf5",
-               "plyr", "ggfortify", "ReportingTools",
-               "vsn", "RColorBrewer")
+libraries <- c("tximport",
+               "DESeq2",
+               "ggplot2",
+               "ReportingTools",
+               "vsn",
+               "RColorBrewer")
 for (lib in libraries) {
     if (require(package = lib, character.only = TRUE)) {
         print("Successful")
@@ -29,6 +31,7 @@ for (lib in libraries) {
         library(lib, character.only = TRUE )
     }
 }
+## Create directory to store results:
 dir.create("results")
 ```
 
@@ -121,40 +124,20 @@ de_genes_infected <- rownames(deseq_results_infected_ordered_significant_df)
 save(de_genes_infected, file = "results/de_genes_postdiapause_infected.RData")
 ```
 
-An additional approach to visualise differentially expressed genes is to output box-plots for each genes:
-
-```{r, message = FALSE}
-## Generate a report on fold changes between treatments
-## Generate a report of differentially expressed genes and output in folder 'reports'.
-## Report results in the generation of boxplots for each statistically significant gene:
-deseq_report <- HTMLReport(shortName = "RNAseq_analysis_with_DESeq2",
-                           title     = "RNA-seq analysis of differential expressed transcripts within postdiapause bumblebee queens exposed to Sphaerularia bombi",
-                           reportDirectory = "results/de_postdiapause_rna_seq_report")
-
-## Publish report:
-publish(deseq_object, deseq_report,
-        pvalueCutoff = 0.05,
-        factor = colData(deseq_object)$treatment,
-        reportDir = "results/de_postdiapause_rna_seq_report")
-
-## Complete the report:        
-finish(deseq_report)
-```
-
 A downstream analysis is to explore gene ontology terms enriched within differentially expressed genes. 
 The next step is to output the name of each gene, as well as raw p-values, which will be used within a rank-based test to test for enrichment of gene ontology terms within differentially expressed genes. 
 
 ```{r}
 # Extract list of genes from the DESeq objects
 # i) For S. bombi infected samples:
-de_genes_for_topGO_infected <- data.frame(locus = row.names(deseq_results_infected),
+de_genes_for_topgo_infected <- data.frame(locus = row.names(deseq_results_infected),
                                           raw_pvalue = deseq_results_infected$pvalue)
 
 # Order by p-values 
-de_genes_for_topGO_infected <- de_genes_for_topGO_infected[order(de_genes_for_topGO_infected$raw_pvalue), ]
+de_genes_for_topgo_infected <- de_genes_for_topgo_infected[order(de_genes_for_topgo_infected$raw_pvalue), ]
 
 ## Write to output:
-write.table(de_genes_for_topGO_infected,
+write.table(de_genes_for_topgo_infected,
             file = "results/de_genes_for_topGO_postdiapause.txt",
             row.names = FALSE,
             sep = "\t",
