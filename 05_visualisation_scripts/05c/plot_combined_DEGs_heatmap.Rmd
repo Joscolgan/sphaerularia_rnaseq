@@ -1,0 +1,64 @@
+--- 
+title: "Sphaerularia-Bombus infection RNA-Seq study"
+output: plot_combined_DEGs_heatmap.html
+author: Joe Colgan (joscolgan)
+--- 
+
+## Introduction:
+This script takes two heatmaps saved R objects as input and generates a combined multi-image plot.
+The output is a multi-image plot.
+
+```{r, message=FALSE}
+# Load libraries; install from scratch if needed
+libraries <- c("ggplot2",
+               "reshape2",
+               "scales",
+               "ggpubr",
+               "grid",
+               "XML")
+for (lib in libraries) {
+    if (require(package = lib, character.only = TRUE)) {
+        print("Successful")
+    } else {
+        print("Installing")
+        source("https://bioconductor.org/biocLite.R")
+        library(lib, character.only = TRUE )
+    }
+}
+
+## Assign path for output:
+output <- "results/heatmap_figure"
+dir.create(output, recursive = TRUE)
+```
+
+Generate a combined heatmap:
+
+```{r, message = FALSE}
+## Load objects:
+load("./input/diapause_plot.Rdata")
+load("./input/pd_plot.Rdata")
+
+## Generate a combined plot:
+ggarrange(diapause_plot,
+          pd_plot,
+          ncol = 1,
+          nrow = 2,
+          align = "hv",
+          labels = c("A", "B"),
+          heights = c(0.8, 4.0),
+          common.legend = TRUE)
+
+## Save output:
+ggsave(paste(output,
+             "/combined_heatmap.pdf",
+             sep = ""),
+       width = 22,
+       height = 20)
+```
+
+Run lintr
+
+```{r, message = FALSE}
+## Run lintr:
+lintr::lint(file = "./plot_combined_DEGs_heatmap.Rmd")
+```
