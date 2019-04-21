@@ -1,4 +1,4 @@
-# Sphaerularia - RNA-Seq
+# Sphaerularia - RNA-Seq analysis
 
 Context & citation:  
 RNA-Seq analyses of bumblebee queens infected by the nematode, _Sphaerularia bombi_  
