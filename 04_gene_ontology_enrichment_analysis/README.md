@@ -1,5 +1,5 @@
-### TJ Colgan 2019
+#### TJ Colgan 2019  
+## Gene Ontology enrichment analysis
 
-The following folder contains scripts for the preparation and performance of 
-1. The GO term genelist file was generated from the _Bombus terrestris_ annotation file.  
-2. Gene ontology term enrichment was performed using [TopGO](http://bioconductor.org/packages/release/bioc/html/topGO.html).  
+The following folder contains scripts for performing Gene Ontology enrichment analysis:     
+1. Gene ontology term enrichment was performed using [TopGO](http://bioconductor.org/packages/release/bioc/html/topGO.html).  
