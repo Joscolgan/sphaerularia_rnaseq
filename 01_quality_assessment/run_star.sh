@@ -12,7 +12,7 @@
 ##
 ########################################################################
 
-for name in ./input/*_1*fastq.gz;
+for name in ./input/*R1*fastq.gz;
 do
 new_name="$(echo "$name" | cut -d '/' -f 3 | cut -d '_' -f 1,2,3,4,5 )"; 
 ## Prin to console the name of the sample being processed:
@@ -21,7 +21,7 @@ echo "$new_name";
 --genomeDir ./star_indexes/ \
 --runThreadN 10 \
 --readFilesCommand zcat \
---readFilesIn "$name" ./input/"$new_name"_2.*fastq \
+--readFilesIn "$name" ./input/"$new_name"R2.*fastq \
 --outFileNamePrefix results/"$new_name";
 ## Convert sam to bam and sort by read name:
 ../src/samtools/samtools view -bS "$name" | ../src/samtools/samtools sort -o "$new_name".bam;
