@@ -1,7 +1,7 @@
 --- 
 title: "Sphaerularia-Bombus infection RNA-Seq study"
 output: differential_expression_analysis_postdiapause_pa.html
-author: Joe Colgan QMUL/UCC
+author: Joe Colgan (joscolgan)
 --- 
 
 # Introduction
