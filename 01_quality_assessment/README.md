@@ -1,4 +1,5 @@
-### TJ Colgan 2019
+#### TJ Colgan 2019  
+## Quality assessment of raw sequences
 
 The present folder contains scripts involved in the quality assessment of Illumina sequences.  
 
