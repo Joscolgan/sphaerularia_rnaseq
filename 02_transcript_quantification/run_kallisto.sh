@@ -1,7 +1,7 @@
 #!/bin/env bash
 ##################################################################################################
 ##
-## Author: Joe Colgan                                                       name:run_kallisto.sh
+## Author: Joe Colgan                                                       name: run_kallisto.sh
 ##
 ## Date:
 ## 
@@ -21,16 +21,16 @@
 ##
 ##################################################################################################
 
-## Define reference file:
-kallisto_ref=tmp/Bter1_cdna
-
-## Generate kallisto-index:
-./kallisto index -i ${kallisto_ref} input/reference/Bter1_cdna.fa 
-
 ## Take input arguments from the command line:
 reference=$1
 input=$2
 output=$3
+
+if [[ $# -eq 0 ]] ; then
+    echo 'No arguments provided'
+    echo 'Usage: ./run_kallisto.sh index_name path_to_input_sequences output_directory'
+    exit 1
+fi
 
 ## Run kallisto:
 ./kallisto quant \
