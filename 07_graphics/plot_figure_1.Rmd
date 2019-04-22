@@ -9,7 +9,10 @@ This script simulates points to plot on a scatterplot, which plots silhouettes o
 
 ```{r, message = FALSE}
 ## Load libraries:
-libraries <- c("tidyverse", "ggtree", "rphylopic", "ggplot2", "EBImage")
+libraries <- c("tidyverse",
+               "rphylopic",
+               "ggplot2",
+               "EBImage")
 for (lib in libraries) {
         if (require(package = lib, character.only = TRUE)) {
                 print("Successful")
@@ -26,33 +29,65 @@ Create points to plot:
 
 ```{r, message = FALSE}
 ## Generate points for plot:
-x_points <- c(-0.25, 0.25, -0.5, 0.5, 0, -0.33, 0.33)
+x_points <- c(-0.5, 0.5, -1, 1.5, 0, -0.75, 0.75)
 y_points <- c(1, 1, 2, 2, 3, 4, 4)
+parasite_x_points <- c(-0.5, 0.5, -1, 1.5)
+parasite_y_points <- c(0.95, 0.95, 1.95, 1.95)
+freeliving_x_points <- c(0.5, 0.5, 0) 
+freeliving_y_points <- c(0.75, 2, 2.75)
 
 ## Combine into a dataframe:
-combined_points_df <- as.data.frame(cbind(x_points,
-                                          y_points))
+host_points_df <- as.data.frame(cbind(x_points,
+                                      y_points))
 
 ## Add status:
-combined_points_df$status <- c(rep("darkred", 4),
-                               rep("black", 3))
+host_points_df$status <- c(rep("gray", 4),
+                           rep("black", 3))
+
+parasite_points_df <- as.data.frame(cbind(parasite_x_points,
+                                          parasite_y_points))
+colnames(parasite_points_df) <- c("x_points",
+                                  "y_points")
+
+## Add status:
+parasite_points_df$status <- c(rep("darkred", 4))
+
+freeliving_points_df <- as.data.frame(cbind(freeliving_x_points,
+                                            freeliving_y_points))
+colnames(freeliving_points_df) <- c("x_points",
+                                  "y_points")
+## Add status:
+freeliving_points_df$status <- c(rep("darkred", 3))
+
+combined_points_df <- rbind(host_points_df,
+                            parasite_points_df,
+                            freeliving_points_df)
 
 ## Gather picture of bumblebee:
 bumblebee <- name_search(text = "Bombus terrestris",
                          options = "namebankID")[[1]]
+nematode <- name_search(text = "Nematoda",
+                         options = "namebankID")[[1]]
+
 ## Check the ID of related images:
-name_images(uuid = bumblebee$uid[1])
+name_images(uuid = nematode$uid[1])
 ## Gather image:
-img <- image_data("750eeb4f-7ca5-49ff-a814-27a12d0cb13a",
+host_img <- image_data("750eeb4f-7ca5-49ff-a814-27a12d0cb13a",
+                  size = "64")[[1]]
+
+parasite_img <- image_data("e9bf2dfa-42fe-4074-adad-e7a2a4be21e9",
+                  size = "64")[[1]]
+
+freeliving_img <- image_data("a68be31e-95e7-415a-8fb2-2a6fd3275cb8",
                   size = "64")[[1]]
 
 ## Generate plot:
 plot <- ggplot(combined_points_df,
             aes(x = x_points,
                 y = y_points)) +
-        xlim(-0.75, 0.75) +
+        xlim(-4, 1.5) +
         ylim(0.8, 4.2) +
-      geom_point() +
+      geom_point(size = 0.1) +
       theme_classic() +
         theme(axis.line = element_blank(),
               axis.text.x = element_blank(),
@@ -68,19 +103,39 @@ plot <- ggplot(combined_points_df,
               plot.background = element_blank())
 
 ## Replace points with bumblebee pictures:
-for (i in 1:nrow(combined_points_df)) {
-  plot <- plot + add_phylopic(img,
+for (i in 1:7) {
+  plot <- plot + add_phylopic(host_img,
                               alpha = 1,
                               x = combined_points_df$x_points[i],
                               y = combined_points_df$y_points[i],
                               ysize = 0.4,
-                              color = combined_points_df$status[i])
+                              color = combined_points_df$status[i]) 
+}
+ 
+## plot parasitic nematodes:
+for (i in 8:11) {
+  plot <- plot + add_phylopic(parasite_img,
+                              alpha = 1,
+                              x = combined_points_df$x_points[i],
+                              y = combined_points_df$y_points[i],
+                              ysize = 0.12,
+                              color = combined_points_df$status[i]) 
+} 
+
+## plot freeliving nematodes:
+for (i in 12:14) { 
+        plot <- plot + add_phylopic(freeliving_img,
+                                    alpha = 1,
+                                    x = combined_points_df$x_points[i],
+                                    y = combined_points_df$y_points[i],
+                                    ysize = 0.12,
+                                    color = combined_points_df$status[i])
 }
 
 ## Save plot:
 ggsave(file = "figure_1.png",
        height = 5,
-       width = 4)
+       width = 7)
 ```
 
 Run lintr:
@@ -88,3 +143,4 @@ Run lintr:
 ```{r, message = FALSE}
 lintr::lint(file = "./plot_figure_1.Rmd")
 ```
+
