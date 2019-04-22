@@ -14,7 +14,7 @@
 
 for name in ./input/*R1*fastq.gz;
 do
-new_name="$(echo "$name" | cut -d '/' -f 3 | cut -d '_' -f 1,2,3,4,5 )"; 
+new_name="$(echo "$name" | cut -d '/' -f 3 | cut -d '.' -f 1)"; 
 ## Prin to console the name of the sample being processed:
 echo "$new_name";
 ./src/STAR/bin/Linux_x86_64_static/STAR  \
@@ -26,3 +26,6 @@ echo "$new_name";
 ## Convert sam to bam and sort by read name:
 ../src/samtools/samtools view -bS "$name" | ../src/samtools/samtools sort -o "$new_name".bam;
 done
+
+## Print to console:
+echo "Complete"
