@@ -9,7 +9,7 @@ If reusing scripts within the present repository, please cite the original sourc
 Scripts available at: https://github.com/wurmlab/Bter_neonicotinoid_exposure_experiment  
 
 The results of this analysis are described in:  
-Colgan, T.J., Carolan,J.C., Sumner, S., Blaxter, M.L., Brown. M.J.F. The entomoparasitic nematode, _Sphaerularia bombi_, alters gene expression in a key pollinator, _Bombus terrestris_ [in prep]  
+Colgan, T.J., Carolan,J.C., Sumner, S., Blaxter, M.L., Brown, M.J.F. The entomoparasitic nematode, _Sphaerularia bombi_, alters gene expression in a key pollinator, _Bombus terrestris_ [in prep]  
 
 This repository contains the following subdirectories:
 ```
