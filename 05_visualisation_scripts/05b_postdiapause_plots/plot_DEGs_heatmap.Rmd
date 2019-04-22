@@ -109,7 +109,7 @@ normalised_counts_subset$description <- paste(annotations$locus, "-",
 
 ## Step Four: Cluster samples by euclidean distance for plotting:
 ## Calculate eucleidean distance between rows:
-dd <- hclust(dist(as.matrix(normalised_counts_subset[, 1:6])))
+dd <- hclust(dist(as.matrix(normalised_counts_subset[, 1:7])))
 
 ## Reorder based on cluster order:
 normalised_counts_ordered <- as.data.frame(normalised_counts_subset[dd$order, ])
