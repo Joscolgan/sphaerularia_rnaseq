@@ -85,8 +85,8 @@ normalised_counts_df_sig_df <- as.data.frame(normalised_counts_df[genelist, ])
 gene_descriptions <- annotations$annotation
 
 ## Generate new sample names for plotting:
-sample_names <- c(paste("infected", "_", 1:7, sep = ""),
-                  paste("control", "_", 1:7, sep = ""))
+sample_names <- c(paste("INF", "_", 1:7, sep = ""),
+                  paste("CON", "_", 1:7, sep = ""))
 
 ## Extract columns of interest:
 column_nums <- c(grep("infected",
@@ -109,7 +109,7 @@ normalised_counts_subset$description <- paste(annotations$locus, "-",
 
 ## Step Four: Cluster samples by euclidean distance for plotting:
 ## Calculate eucleidean distance between rows:
-dd <- hclust(dist(as.matrix(normalised_counts_subset[, 1:7])))
+dd <- hclust(dist(as.matrix(normalised_counts_subset[, 1:14])))
 
 ## Reorder based on cluster order:
 normalised_counts_ordered <- as.data.frame(normalised_counts_subset[dd$order, ])
@@ -168,8 +168,8 @@ save(pd_plot,
 
 ## Save output:
 ggsave("./results/postdiapause_heatmap.png",
-       width = 20,
-       height = 18)
+       width = 18,
+       height = 12)
 ```
 
 Run lintr
