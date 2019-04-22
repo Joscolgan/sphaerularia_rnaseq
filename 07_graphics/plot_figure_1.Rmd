@@ -1,0 +1,90 @@
+--- 
+title: "Sphaerularia-Bombus infection RNA-Seq study"
+output: plot_figure_1.html
+author: Joe Colgan (joscolgan)
+--- 
+
+## Introduction:
+This script simulates points to plot on a scatterplot, which plots silhouettes of bumblebees obtained from [rhylopic]("https://github.com/sckott/rphylopic"). The output is the base outline for figure 1.
+
+```{r, message = FALSE}
+## Load libraries:
+libraries <- c("tidyverse", "ggtree", "rphylopic", "ggplot2", "EBImage")
+for (lib in libraries) {
+        if (require(package = lib, character.only = TRUE)) {
+                print("Successful")
+        } else {
+                print("Installing")
+                source("https://bioconductor.org/biocLite.R")
+                biocLite(pkgs = lib)
+                library(lib, character.only = TRUE )
+        }
+}
+```
+
+Create points to plot:
+
+```{r, message = FALSE}
+## Generate points for plot:
+x_points <- c(-0.25, 0.25, -0.5, 0.5, 0, -0.33, 0.33)
+y_points <- c(1, 1, 2, 2, 3, 4, 4)
+
+## Combine into a dataframe:
+combined_points_df <- as.data.frame(cbind(x_points,
+                                          y_points))
+
+## Add status:
+combined_points_df$status <- c(rep("darkred", 4),
+                               rep("black", 3))
+
+## Gather picture of bumblebee:
+bumblebee <- name_search(text = "Bombus terrestris",
+                         options = "namebankID")[[1]]
+## Check the ID of related images:
+name_images(uuid = bumblebee$uid[1])
+## Gather image:
+img <- image_data("750eeb4f-7ca5-49ff-a814-27a12d0cb13a",
+                  size = "64")[[1]]
+
+## Generate plot:
+plot <- ggplot(combined_points_df,
+            aes(x = x_points,
+                y = y_points)) +
+        xlim(-0.75, 0.75) +
+        ylim(0.8, 4.2) +
+      geom_point() +
+      theme_classic() +
+        theme(axis.line = element_blank(),
+              axis.text.x = element_blank(),
+              axis.text.y = element_blank(),
+              axis.ticks = element_blank(),
+              axis.title.x = element_blank(),
+              axis.title.y = element_blank(),
+              legend.position = "none",
+              panel.background = element_blank(),
+              panel.border = element_blank(),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              plot.background = element_blank())
+
+## Replace points with bumblebee pictures:
+for (i in 1:nrow(combined_points_df)) {
+  plot <- plot + add_phylopic(img,
+                              alpha = 1,
+                              x = combined_points_df$x_points[i],
+                              y = combined_points_df$y_points[i],
+                              ysize = 0.4,
+                              color = combined_points_df$status[i])
+}
+
+## Save plot:
+ggsave(file = "figure_1.png",
+       height = 5,
+       width = 4)
+```
+
+Run lintr:
+
+```{r, message = FALSE}
+lintr::lint(file = "./plot_figure_1.Rmd")
+```
