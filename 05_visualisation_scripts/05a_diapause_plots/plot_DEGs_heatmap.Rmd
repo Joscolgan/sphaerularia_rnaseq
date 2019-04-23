@@ -81,8 +81,8 @@ normalised_counts_df_sig_df <- as.data.frame(normalised_counts_df[genelist, ])
 gene_descriptions <- annotations$annotation
 
 ## Generate new sample names for plotting:
-sample_names <- c(paste("infected", "_", 1:3, sep = ""),
-                  paste("control", "_", 1:3, sep = ""))
+sample_names <- c(paste("INF", "_", 1:3, sep = ""),
+                  paste("CON", "_", 1:3, sep = ""))
 
 ## Extract columns of interest:
 column_nums <- c(grep("infected",
