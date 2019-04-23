@@ -1,0 +1,10 @@
+LOC100643871	glucosylceramidase
+LOC100644382	regucalcin
+LOC100644055	glucose_dehydrogenase_[FAD,_quinone]
+LOC100645043	iron-sulfur_cluster_assembly_enzyme_ISCU,_mitochondrial-like
+LOC100648490	cysteine-rich_venom_protein_6
+LOC100646202	mucin-5AC
+LOC100643402	PHD_and_ring_finger_domains_1
+LOC100647279	Bromo_adjacenty_domain-containing
+LOC105667158	uncharacterized
+LOC105666275	retrovirus-related_pol_polyprotein_from_transposon_tnt_1-94
