@@ -40,7 +40,7 @@ After loading libraries, the second step of the analysis involves reading in dat
 ```{r, message=FALSE} 
 ## Set paths to folders containing output files from kallisto
 paths <- list()
-paths$kallisto_output <- "./input/kallisto_quantification/"
+paths$kallisto_output <- "./input/"
 
 # Set relative paths:
 paths$kallisto_files_relative <- grep(x = list.files(paths$kallisto_output,
@@ -54,8 +54,8 @@ paths$kallisto_files <- file.path(paths$kallisto_output,
 ## treatment:
 ## Assign the number of biological replicates
 replicates <- 3
-treatment <- c(rep("control", replicates),
-               rep("infected", replicates))
+treatment <- c(rep("infected", replicates),
+               rep("control", replicates))
 
 ## Generate simple information dataframe:
 samples <- as.data.frame(treatment, paths$kallisto_files)
@@ -66,7 +66,7 @@ samples$treatment <- relevel(x = samples$treatment,
                              ref = "control")
 
 # Read in file corresponding to transcripts to gene ids
-tx_gene <- "input/differential_expression/rna_and_corresponding_gene_ids.txt"
+tx_gene <- "input/rna_and_corresponding_gene_ids.txt"
 tx2gene <- read.table(file = tx_gene,
                       header = FALSE,
                       col.names = c("TXNAME",
@@ -80,7 +80,7 @@ txi_counts <- tximport(paths$kallisto_files,
                        countsFromAbundance = "no")
 
 # Save object for use in other scripts
-save(txi_counts, file = "results/diapause_raw_counts.Rdata")
+save(txi_counts, file = "diapause_raw_counts.Rdata")
 
 ## Construct DESeq data set from txi object and sample information:
 deseq_txi <- DESeqDataSetFromTximport(txi     = txi_counts,
@@ -100,7 +100,7 @@ deseq_results_infected <- results(deseq_object,
 
 ## Save object for use in generating heatmap:
 save(deseq_object,
-     file = "results/diapause_deseq_object.Rdata")
+     file = "diapause_deseq_object.Rdata")
 
 ## Order results table by smallest raw pvalue:
 deseq_results_infected_ordered <- deseq_results_infected[order(deseq_results_infected$pvalue), ]
