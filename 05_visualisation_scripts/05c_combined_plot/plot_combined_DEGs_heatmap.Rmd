@@ -50,10 +50,11 @@ ggarrange(diapause_plot,
 
 ## Save output:
 ggsave(paste(output,
-             "/combined_heatmap.png",
+             "/combined_heatmap.pdf",
              sep = ""),
+       dpi = 600,
        width = 20,
-       height = 16)
+       height = 18)
 ```
 
 Run lintr
