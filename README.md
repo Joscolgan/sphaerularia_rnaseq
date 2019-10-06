@@ -1,4 +1,4 @@
-# Sphaerularia - RNA-Seq analysis
+# _Bombus-Sphaerularia_ - RNA-Seq analysis
 
 Context & citation:  
 This repository contains scripts for the analysis of infected _Bombus terrestris_ queens.  
