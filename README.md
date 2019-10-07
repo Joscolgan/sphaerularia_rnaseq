@@ -9,6 +9,11 @@ Scripts available at: https://github.com/wurmlab/Bter_neonicotinoid_exposure_exp
 The results of this analysis are described in:  
 Colgan, T.J., Carolan,J.C., Sumner, S., Blaxter, M.L., Brown, M.J.F. [Infection by the castrating parasitic nematode _Sphaerularia bombi_ changes gene expression in _Bombus terrestris_ bumblebee queens](https://doi.org/10.1111/imb.12618)
 
+## License
+This work is distributed under the [GPLv3 license](LICENSE). Reuse of code derived from this repository is permitted under two conditions: 
+1) Proper attribution (i.e., citation of the associated publication; see [CITATION.cff](CITATION.cff) and above).  
+2) Publication of reused scripts on an open-access platform, such as Github.  
+
 This repository contains the following subdirectories:
 ```
 |-01_quality_assessment
@@ -17,4 +22,5 @@ This repository contains the following subdirectories:
 |-04_gene_ontology_enrichment_analysis
 |-05_visualisation_scripts
 |-06_deg_assessment_analysis
+|-07_graphics
 ```
