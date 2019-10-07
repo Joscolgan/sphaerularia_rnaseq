@@ -7,7 +7,7 @@ If reusing scripts within the present repository, please cite the original sourc
 Scripts available at: https://github.com/wurmlab/Bter_neonicotinoid_exposure_experiment  
 
 The results of this analysis are described in:  
-Colgan, T.J., Carolan,J.C., Sumner, S., Blaxter, M.L., Brown, M.J.F. [Infection by the castrating parasitic nematode _Sphaerularia bombi_ changes gene expression in _Bombus terrestris_ bumblebee queens](https://doi.org/10.1111/imb.12618)
+[Infection by the castrating parasitic nematode _Sphaerularia bombi_ changes gene expression in _Bombus terrestris_ bumblebee queens](https://doi.org/10.1111/imb.12618)Colgan, T.J., Carolan,J.C., Sumner, S., Blaxter, M.L., Brown, M.J.F. _Insect Molecular Biology_
 
 ## License
 This work is distributed under the [GPLv3 license](LICENSE). Reuse of code derived from this repository is permitted under two conditions: 
