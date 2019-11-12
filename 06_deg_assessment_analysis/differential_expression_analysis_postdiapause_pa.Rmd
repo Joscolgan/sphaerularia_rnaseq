@@ -64,7 +64,7 @@ tx2gene <- read.table(file = "input/differential_expression/rna_and_correspondin
                       header = FALSE,
                       col.names = c("TXNAME", "GENEID"))
 
-## Subsample three samples from each treatment:
+## Subsample six samples from each treatment:
 for (test in 1:30){
         replicates <- 6
         treatment <- c(rep("infected", replicates),
